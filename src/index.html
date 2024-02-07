@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wordler</title>
+    <style>
+        body {
+            color: white;
+            background: black;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: center;
+            padding: 5rem 0 5rem 0;
+            margin: 0;
+            border: 0;
+        }
+
+        .info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: fixed;
+            left: 1rem;
+            bottom: 1rem;
+            font-size: x-small;
+        }
+
+        .info.hidden {
+            display: none;
+        }
+
+        .info .label {
+            text-align: right;
+        }
+
+        .info .language, .info .size {
+            padding-left: 0.7rem;
+        }
+
+        .footer {
+            position: fixed;
+            right: 1rem;
+            bottom: 1rem;
+            color: white;
+            font-size: x-small;
+            text-decoration: none;
+        }
+
+        .rows {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .row, .letters {
+            display: flex;
+            gap: 0.3rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .count, .cell, .button {
+            min-width: 4rem;
+            max-width: 4rem;
+            min-height: 4rem;
+            max-height: 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            font-weight: bolder;
+            font-size: xx-large;
+        }
+
+        .count {
+            max-width: initial;
+            min-width: initial;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            font-size: small;
+            justify-content: end;
+            cursor: pointer;
+        }
+
+        .button {
+            max-width: initial;
+            min-width: initial;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            font-size: x-large;
+            visibility: hidden;
+        }
+
+        .cell.active, .button.active {
+            cursor: pointer;
+            visibility: initial;
+        }
+
+        .cell.wrong {
+            background: rgb(58, 58, 60)
+        }
+
+        .cell.misplaced {
+            background: rgb(181, 159, 59);
+        }
+
+        .cell.correct {
+            background: rgb(83, 141, 78);
+        }
+    </style>
+</head>
+<body>
+<div class="title"></div>
+<div class="info hidden">
+    <div class="label">language:</div><div class="language"></div>
+    <div class="label">dictionary size:</div><div class="dictionary size"></div>
+    <div class="label">solution size:</div><div class="solution size"></div>
+</div>
+<div class="rows"></div>
+<a class="footer" href="https://github.com/jsiembida/wordler">github</a>
+<script src="index.js"></script>
+</body>
+</html>

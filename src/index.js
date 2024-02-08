@@ -82,7 +82,13 @@ class Wordle {
       wordCounters.set(word, counter);
     });
     this.language = language;
-    this.direction = new Intl.Locale(language).textInfo.direction;
+    const textInfo = new Intl.Locale(language).textInfo;
+    if (textInfo == null) {
+      // Firefox doesn't support textInfo, so a clunky workaround instead;
+      this.direction = ['ar', 'he', 'yi', 'ur', 'fa'].some(i => i === language) ? 'rtl' : 'ltr';
+    } else {
+      this.direction = textInfo.direction;
+    }
     this.wordLength = wordLength;
     this.wordChars = wordChars;
     this.wordCounters = wordCounters;

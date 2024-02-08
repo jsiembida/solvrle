@@ -3,7 +3,7 @@
 
 ## Wordler
 
-is a multi language Wordle solver with a web based GUI.
+is a multi language wordle solver with a web based GUI.
 
 - It is language agnostic, can handle LTR and RTL dictionaries with words of any lengths
 (not just 5 letters).
@@ -13,7 +13,7 @@ minified and gzipped is around 3kB.
 
 
 
-## Running
+## How to use it
 
 The `src` directory has fully functioning code that's ready to go. For example:
 
@@ -21,7 +21,13 @@ The `src` directory has fully functioning code that's ready to go. For example:
 $ python3 -m http.server --directory src 8080
 ```
 
-And point your browser at `127.0.0.1:8080` The url accepts an optional `test` parameter.
+And point your browser at `127.0.0.1:8080` The default gui is interactive. A guess word
+is produced and needs to be fed to the wordle interface being solved. In return, guess
+results (letter colors) are fed back to Wordler. Process repeats until solution is found.
+
+![screenshot](screenshot.jpg)
+
+The Wordler url accepts an optional `test` parameter.
 
 `127.0.0.1:8080?test` - will run automatic tests against all words in the provided dictionary,
 with results left in the web console
@@ -78,7 +84,7 @@ Efficiency depends on the dictionary size. Below are results for the eight langu
 
 How to read the above table?
 
-For the original English Wordle that has a dictionary of 2309 words, over 99% of them will be guessed
+For the original English wordle that has a dictionary of 2309 words, over 99% of them will be guessed
 within the 6 rows. However, the worst case takes 8 rows. Frequencies of letters in the dictionary are
 use in the process of finding  the solution, which is prone to "long tail" cases. In English for example,
 words `batch`, `catch`, `match`, `hatch`, `watch` are a close clump and getting the first letter poses

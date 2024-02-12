@@ -3,7 +3,7 @@
 
 ## Wordler
 
-is a multi language wordle solver with a web based GUI.
+is a lightweight, web based, multi language wordle solver.
 
 - It is language agnostic, can handle LTR and RTL dictionaries with words of any lengths
 (not just 5 letters).
@@ -66,10 +66,11 @@ npm run build
 ```
 
 
-
 ## Results
 
-Efficiency depends on the dictionary size. Below are results for the eight languages included.
+Wordler doesn't build the full graph, it takes much lighter and straightforward approach which also means,
+that there is no 100% guarantee on finding solution within the 6 attempts. Efficiency depends on the dictionary
+size. Below are results for the eight languages included.
 
 | wordle                                                     | dictionary | alphabet   | 6 row efficiency | 100% efficiency |
 |------------------------------------------------------------|------------|------------|------------------|-----------------|
@@ -86,6 +87,6 @@ How to read the above table?
 
 For the original English wordle that has a dictionary of 2309 words, over 99% of them will be guessed
 within the 6 rows. However, the worst case takes 8 rows. Frequencies of letters in the dictionary are
-use in the process of finding  the solution, which is prone to "long tail" cases. In English for example,
-words `batch`, `catch`, `match`, `hatch`, `watch` are a close clump and getting the first letter poses
-an elimination problem.
+used in the process of finding the solution, which is prone to "long tail" cases. In English for example,
+words `batch`, `catch`, `match`, `hatch`, `watch` are a close clump and after finding the common suffix,
+getting the first letter right poses an elimination problem.

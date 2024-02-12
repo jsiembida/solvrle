@@ -32,7 +32,7 @@ class Counter extends Map {
 }
 
 
-class Wordle {
+class Wordler {
   constructor(language, wordList) {
     this.initWords(language, wordList);
     this.initState();
@@ -94,7 +94,7 @@ class Wordle {
     this.wordCounters = wordCounters;
     this.columnChars = columnChars;
     this.charFreqs = charFreqs;
-    console.log(`Loaded wordle, language = ${language}, direction = ${this.direction}, word size = ${wordLength}, dictionary size = ${wordChars.size}, alphabet size = ${charFreqs.size}`);
+    console.log(`Loaded wordler, language = ${language}, direction = ${this.direction}, word size = ${wordLength}, dictionary size = ${wordChars.size}, alphabet size = ${charFreqs.size}`);
   }
 
   initState() {
@@ -385,24 +385,24 @@ class Wordle {
 
 
 class Test {
-  constructor(wordle, word) {
-    if (word != null && !wordle.wordChars.has(word)) {
+  constructor(wordler, word) {
+    if (word != null && !wordler.wordChars.has(word)) {
       throw `${word} is not in the dictionary`;
     }
-    this.wordle = wordle;
+    this.wordler = wordler;
     this.run(word);
   }
 
   run(word) {
-    const { wordle } = this;
+    const { wordler } = this;
     const solutions = new Map();
-    const words = word ? [word] : wordle.wordChars.keys();
+    const words = word ? [word] : wordler.wordChars.keys();
     const oneWord = words.length === 1;
     for (const word of words) {
-      wordle.initState();
+      wordler.initState();
 
-      while (wordle.attemptCount < 100) {
-        const guessWord = wordle.makeGuess();
+      while (wordler.attemptCount < 100) {
+        const guessWord = wordler.makeGuess();
         if (guessWord == null) {
           throw 'This should not happen';
         }
@@ -411,20 +411,20 @@ class Test {
           console.log(`trying ${guessWord}`);
         }
 
-        const matches = wordle.compareGuess(word);
+        const matches = wordler.compareGuess(word);
         if (matches.every(i => i > 0)) {
-          console.log(`guessed ${guessWord} at try ${wordle.attemptCount}`);
+          console.log(`guessed ${guessWord} at try ${wordler.attemptCount}`);
           break;
         }
 
-        wordle.scoreGuess(matches);
-        wordle.trimUnusedWords();
-        wordle.trimPossibleWords();
+        wordler.scoreGuess(matches);
+        wordler.trimUnusedWords();
+        wordler.trimPossibleWords();
       }
 
-      const bucket = solutions.get(wordle.attemptCount) || [];
+      const bucket = solutions.get(wordler.attemptCount) || [];
       bucket.push(word);
-      solutions.set(wordle.attemptCount, bucket);
+      solutions.set(wordler.attemptCount, bucket);
     }
 
     if (!oneWord) {
@@ -468,11 +468,11 @@ class Test {
 
 
 class Game {
-  constructor(wordle, word) {
-    if (word != null && !wordle.wordChars.has(word)) {
+  constructor(wordler, word) {
+    if (word != null && !wordler.wordChars.has(word)) {
       throw `${word} is not in the dictionary`;
     }
-    this.wordle = wordle;
+    this.wordler = wordler;
     this.rows = document.querySelector('.rows');
     this.info = document.querySelector('.info');
     if (word == null) {
@@ -483,47 +483,47 @@ class Game {
   }
 
   solveWord(word) {
-    const { wordle } = this;
+    const { wordler } = this;
     while (true) {
-      const guessWord = wordle.makeGuess();
-      const matches = wordle.compareGuess(word);
-      this.rows.append(this.buildRow(wordle.guessChars, matches));
+      const guessWord = wordler.makeGuess();
+      const matches = wordler.compareGuess(word);
+      this.rows.append(this.buildRow(wordler.guessChars, matches));
       this.updateInfo();
       if (matches.every(i => i > 0)) {
-        console.log(`guessed ${guessWord} at try ${wordle.attemptCount}`);
+        console.log(`guessed ${guessWord} at try ${wordler.attemptCount}`);
         break;
       }
-      wordle.scoreGuess(matches);
-      wordle.trimUnusedWords();
-      wordle.trimPossibleWords();
+      wordler.scoreGuess(matches);
+      wordler.trimUnusedWords();
+      wordler.trimPossibleWords();
     }
   }
 
   openRow() {
-    const { wordle } = this;
-    const guessWord = wordle.makeGuess();
+    const { wordler } = this;
+    const guessWord = wordler.makeGuess();
     if (guessWord != null) {
       console.log(`trying ${guessWord}`);
-      this.rows.append(this.buildRow(wordle.guessChars));
+      this.rows.append(this.buildRow(wordler.guessChars));
     }
     this.updateInfo();
   }
 
   updateInfo() {
-    const { wordle, info } = this;
-    info.querySelector('.language').innerText = wordle.language;
-    info.querySelector('.dictionary.size').innerText = '' + wordle.wordChars.size;
-    info.querySelector('.solution.size').innerText = '' + wordle.possibleWords.length;
+    const { wordler, info } = this;
+    info.querySelector('.language').innerText = wordler.language;
+    info.querySelector('.dictionary.size').innerText = '' + wordler.wordChars.size;
+    info.querySelector('.solution.size').innerText = '' + wordler.possibleWords.length;
     info.classList.remove('hidden');
   }
 
   closeRow(matches) {
-    const { wordle } = this;
-    wordle.scoreGuess(matches);
-    wordle.trimUnusedWords();
-    wordle.trimPossibleWords();
+    const { wordler } = this;
+    wordler.scoreGuess(matches);
+    wordler.trimUnusedWords();
+    wordler.trimPossibleWords();
     if (matches.every(i => i > 0)) {
-      console.log(`guessed at attempt ${this.attempt}`);
+      console.log(`guessed at attempt ${wordler.attemptCount}`);
     } else {
       this.openRow();
     }
@@ -598,8 +598,8 @@ class Game {
 
   buildCount() {
     const count = document.createElement('div');
-    const word = String.fromCodePoint(...this.wordle.guessChars);
-    count.innerText = this.wordle.attemptCount + '.';
+    const word = String.fromCodePoint(...this.wordler.guessChars);
+    count.innerText = this.wordler.attemptCount + '.';
     count.classList.add('count');
     count.addEventListener('click', () => navigator.clipboard.writeText(word));
     return count;
@@ -608,7 +608,7 @@ class Game {
   buildLetters(chars, matches) {
     const letters = document.createElement('div');
     letters.classList.add('letters');
-    letters.style.direction = this.wordle.direction;
+    letters.style.direction = this.wordler.direction;
     letters.append(...chars.map((char, i) => this.buildCell(char, matches[i])));
     return letters;
   }
@@ -636,20 +636,20 @@ function loadGzipped(language) {
 }
 
 
-function loadWordle() {
+function loadWordler() {
   const language = navigator.language.match(/^\w+/)[0];
   const testWord = new URLSearchParams(document.location.search).get('test');
   loadGzipped(language)
     .then(r => r.text())
     .then(r => {
-      const wordle = new Wordle(language, JSON.parse(r));
-      return (testWord != null && testWord.length === 0) ? new Test(wordle) : new Game(wordle, testWord);
+      const wordler = new Wordler(language, JSON.parse(r));
+      return (testWord != null && testWord.length === 0) ? new Test(wordler) : new Game(wordler, testWord);
     });
 }
 
 
 if (typeof navigator !== 'undefined') {
-  document.addEventListener('DOMContentLoaded', loadWordle);
+  document.addEventListener('DOMContentLoaded', loadWordler);
 } else if (typeof process !== 'undefined') {
   if (process.argv.length !== 3 && process.argv.length !== 4) {
     throw 'Dictionary path is required';
@@ -664,5 +664,5 @@ if (typeof navigator !== 'undefined') {
   }
   const language = Intl.DateTimeFormat().resolvedOptions().locale.match(/^\w+/)[0];
   /* eslint-disable no-new */
-  new Test(new Wordle(language, JSON.parse(data.toString())), process.argv[3]);
+  new Test(new Wordler(language, JSON.parse(data.toString())), process.argv[3]);
 }
